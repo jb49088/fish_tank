@@ -64,11 +64,12 @@ class FishTank:
         ]
 
     def prep_grid(self):
-        self.grid[self.fish.position[0]][self.fish.position[1]] = (
-            self.settings.color_codes[self.fish.color]
-            + self.fish.ascii["right"]
-            + self.settings.reset_code
-        )
+        for i, char in enumerate(self.fish.ascii["right"]):
+            self.grid[self.fish.position[0]][self.fish.position[1] + i] = (
+                self.settings.color_codes[self.fish.color]
+                + char
+                + self.settings.reset_code
+            )
 
     def print_grid(self):
         for row in self.grid:
