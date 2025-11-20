@@ -1,3 +1,9 @@
+import shutil
+
+SIZE = shutil.get_terminal_size()
+WIDTH = SIZE.columns
+HEIGHT = SIZE.lines
+
 FISH_TYPES = {
     "right": r"""
             \'`.
