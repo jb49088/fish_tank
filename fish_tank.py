@@ -1,5 +1,6 @@
 import random
 import shutil
+import sys
 import time
 
 
@@ -78,4 +79,7 @@ class FishTank:
 
 if __name__ == "__main__":
     fish_tank = FishTank()
-    fish_tank.play_animation()
+    try:
+        fish_tank.play_animation()
+    except KeyboardInterrupt:
+        sys.exit()
