@@ -65,16 +65,24 @@ class FishTank:
         ]
 
     def prep_grid(self):
+        # Insert fish
         for i, char in enumerate(self.fish.ascii["right"]):
             self.grid[self.fish.position[0]][self.fish.position[1] + i] = (
                 self.settings.color_codes[self.fish.color]
                 + char
                 + self.settings.reset_code
             )
+        # Insert sand
+        for i in range(self.settings.width):
+            self.grid[self.settings.height - 1][i] = (
+                self.settings.color_codes["yellow"] + "░" + self.settings.reset_code
+            )
 
     def print_grid(self):
+        print("\033[H", end="")
         for row in self.grid:
-            print("".join(row))
+            print("".join(row), end="")
+        sys.stdout.flush()
 
 
 if __name__ == "__main__":
