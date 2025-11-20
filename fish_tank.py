@@ -13,8 +13,8 @@ class Settings:
         self.width = self.size.columns
         self.height = self.size.lines
 
-        self.colors = {
-            "reset": "\033[0m",
+        self.reset_code = "\033[0m"
+        self.color_codes = {
             "red": "\033[31m",
             "orange": "\033[38;5;208m",
             "yellow": "\033[33m",
@@ -35,7 +35,7 @@ class Fish:
         self.ascii = {"right": "><>", "left": "<><"}
         self.position = [5, 20]
         self.speed = random.randint(1, 2)
-        self.color = random.choice(list(self.settings.colors.keys()))
+        self.color = random.choice(list(self.settings.color_codes.keys()))
 
     def swim(self):
         self.position[1] += self.speed
@@ -65,9 +65,9 @@ class FishTank:
 
     def prep_grid(self):
         self.grid[self.fish.position[0]][self.fish.position[1]] = (
-            self.settings.colors[self.fish.color]
+            self.settings.color_codes[self.fish.color]
             + self.fish.ascii["right"]
-            + self.settings.colors["reset"]
+            + self.settings.reset_code
         )
 
     def print_grid(self):
