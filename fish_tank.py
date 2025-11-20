@@ -1,45 +1,26 @@
 import shutil
+import time
 
 
 class Settings:
     """A class to store all settings for fish_tank."""
 
     def __init__(self):
+        self.framerate = 4
+
         self.size = shutil.get_terminal_size()
         self.width = self.size.columns
         self.height = self.size.lines
+        self.grid = [[" " for _ in range(self.width)] for _ in range(self.height)]
 
 
 class Fish:
-    """A class to store all information about the fish."""
-
-    FISH_TYPES = [
-        {
-            "right": r"""
-                \'`.
-                 )  \
-    (`.??????_.-`' ' '`-.
-     \ `.??.`        (o) \_
-      >  ><     (((       (
-     / .`??`._      /_|  /'
-    (.`???????`-. _  _.-`
-                /__/'
-    """,
-            "left": r"""
-           .'`/
-          /  (
-      .-'` ` `'-._??????.')
-    _/ (o)        '.??.' /
-    )       )))     ><  <
-    `\  |_\      _.'??'. \
-      '-._  _ .-'???????'.)
-          `\__\
-    """,
-        }
-    ]
+    """A class to store all information about a fish."""
 
     def __init__(self):
-        pass
+        self.ascii = {"right": "><>", "left": "<><"}
+        self.width = len(self.ascii["right"])
+        self.position = (5, 20)
 
 
 class FishTank:
@@ -52,7 +33,18 @@ class FishTank:
 
     def play_animation(self):
         while True:
-            pass
+            self.prep_grid()
+            self.print_grid()
+            time.sleep(1 / self.settings.framerate)
+
+    def prep_grid(self):
+        self.settings.grid[self.fish.position[0]][self.fish.position[1]] = (
+            self.fish.ascii["right"]
+        )
+
+    def print_grid(self):
+        for row in self.settings.grid:
+            print("".join(row))
 
 
 if __name__ == "__main__":
