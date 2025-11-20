@@ -1,3 +1,4 @@
+import random
 import shutil
 import time
 
@@ -11,7 +12,6 @@ class Settings:
         self.size = shutil.get_terminal_size()
         self.width = self.size.columns
         self.height = self.size.lines
-        self.grid = [[" " for _ in range(self.width)] for _ in range(self.height)]
 
 
 class Fish:
@@ -19,8 +19,11 @@ class Fish:
 
     def __init__(self):
         self.ascii = {"right": "><>", "left": "<><"}
-        self.width = len(self.ascii["right"])
-        self.position = (5, 20)
+        self.position = [5, 20]
+        self.speed = random.randint(1, 2)
+
+    def swim(self):
+        self.position[1] += self.speed
 
 
 class FishTank:
@@ -33,17 +36,25 @@ class FishTank:
 
     def play_animation(self):
         while True:
+            self.reset_grid()
             self.prep_grid()
             self.print_grid()
+            self.fish.swim()
             time.sleep(1 / self.settings.framerate)
 
+    def reset_grid(self):
+        self.grid = [
+            [" " for _ in range(self.settings.width)]
+            for _ in range(self.settings.height)
+        ]
+
     def prep_grid(self):
-        self.settings.grid[self.fish.position[0]][self.fish.position[1]] = (
-            self.fish.ascii["right"]
-        )
+        self.grid[self.fish.position[0]][self.fish.position[1]] = self.fish.ascii[
+            "right"
+        ]
 
     def print_grid(self):
-        for row in self.settings.grid:
+        for row in self.grid:
             print("".join(row))
 
 
