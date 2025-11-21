@@ -9,11 +9,22 @@ class Settings:
 
     def __init__(self):
         self.framerate = 5
-        self.fish_count = 100
+        self.fish_count = 25
 
         self.size = shutil.get_terminal_size()
         self.width = self.size.columns
         self.height = self.size.lines
+
+        self.sprites = [
+            {1: "><>", -1: "<><"},
+            {1: ">||>", -1: "<||<"},
+            {1: ">))>", -1: "<((<"},
+            {1: ">-==>", -1: "<==-<"},
+            {1: r">\\>", -1: "<//<"},
+            {1: "><)))*>", -1: "<*(((><"},
+            {1: "}-[[[*>", -1: "<*]]]-{"},
+            {1: "><XXX*>", -1: "<*XXX><"},
+        ]
 
         self.reset_code = "\033[0m"
         self.color_codes = {
@@ -34,13 +45,13 @@ class Fish:
 
     def __init__(self):
         self.settings = Settings()
-        self.sprites = {1: "><>", -1: "<><"}
+        self.sprite = random.choice(self.settings.sprites)
+        self.color = random.choice(list(self.settings.color_codes.keys()))
+        self.direction = random.choice((1, -1))
         self.position = [
             random.randint(0, self.settings.height - 2),
-            random.randint(0, self.settings.width - 3),
+            random.randint(0, self.settings.width - len(self.sprite[self.direction])),
         ]
-        self.direction = random.choice((1, -1))
-        self.color = random.choice(list(self.settings.color_codes.keys()))
 
     def swim(self):
         if random.random() < 0.02:
@@ -53,7 +64,10 @@ class Fish:
 
     def would_hit_edge(self):
         next_x = self.position[1] + self.direction
-        return next_x > self.settings.width - 3 or next_x < 0
+        return (
+            next_x > self.settings.width - len(self.sprite[self.direction])
+            or next_x < 0
+        )
 
     def change_direction(self):
         self.direction *= -1
@@ -86,7 +100,7 @@ class FishTank:
 
         # Insert fish
         for fish in self.school:
-            sprite = fish.sprites[fish.direction]
+            sprite = fish.sprite[fish.direction]
             color = self.settings.color_codes[fish.color]
 
             for i, char in enumerate(sprite):
