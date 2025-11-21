@@ -54,24 +54,17 @@ class Fish:
         ]
 
     def swim(self):
-        action_taken = False
-
-        if random.random() < 0.5:
-            action_taken = True
-
-        if random.random() < 0.03:
-            self.change_altitude()
-            action_taken = True
-
-        if random.random() < 0.03:
-            self.change_direction()
-            action_taken = True
-
         if self.would_hit_horizontal_edge():
             self.change_direction()
-            action_taken = True
+            return
 
-        if not action_taken:
+        r = random.random()
+
+        if r < 0.03:
+            self.change_altitude()
+        elif r < 0.06:
+            self.change_direction()
+        elif r < 0.56:
             self.position[1] += self.direction
 
     def change_altitude(self):
