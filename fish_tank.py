@@ -60,7 +60,7 @@ class Fish:
         if random.random() < 0.03:
             self.change_direction()
 
-        if self.would_hit_edge():
+        if self.would_hit_horizontal_edge():
             self.change_direction()
 
         self.position[1] += self.direction
@@ -77,7 +77,7 @@ class Fish:
     def change_direction(self):
         self.direction *= -1
 
-    def would_hit_edge(self):
+    def would_hit_horizontal_edge(self):
         next_x = self.position[1] + self.direction
         return (
             next_x > self.settings.width - len(self.sprite[self.direction])
