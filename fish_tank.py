@@ -9,7 +9,7 @@ class Settings:
 
     def __init__(self):
         self.framerate = 5
-        self.fish_count = 25
+        self.fish_count = 35
 
         self.size = shutil.get_terminal_size()
         self.width = self.size.columns
@@ -54,7 +54,10 @@ class Fish:
         ]
 
     def swim(self):
-        if random.random() < 0.02:
+        if random.random() < 0.03:
+            self.change_altitude()
+
+        if random.random() < 0.03:
             self.change_direction()
 
         if self.would_hit_edge():
@@ -62,15 +65,24 @@ class Fish:
 
         self.position[1] += self.direction
 
+    def change_altitude(self):
+        y = self.position[0]
+        min_y = 0
+        max_y = self.settings.height - 2
+
+        dy = 1 if y == min_y else -1 if y == max_y else random.choice((1, -1))
+
+        self.position[0] = y + dy
+
+    def change_direction(self):
+        self.direction *= -1
+
     def would_hit_edge(self):
         next_x = self.position[1] + self.direction
         return (
             next_x > self.settings.width - len(self.sprite[self.direction])
             or next_x < 0
         )
-
-    def change_direction(self):
-        self.direction *= -1
 
 
 class FishTank:
