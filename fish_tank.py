@@ -79,19 +79,20 @@ class FishTank:
         ]
 
     def prep_grid(self):
+        reset = self.settings.reset_code
+
         # Insert fish
         for fish in self.school:
-            for i, char in enumerate(fish.sprites[fish.direction]):
-                self.grid[fish.position[0]][fish.position[1] + i] = (
-                    self.settings.color_codes[fish.color]
-                    + char
-                    + self.settings.reset_code
-                )
+            sprite = fish.sprites[fish.direction]
+            color = self.settings.color_codes[fish.color]
+
+            for i, char in enumerate(sprite):
+                self.grid[fish.position[0]][fish.position[1] + i] = color + char + reset
+
         # Insert sand
+        yellow = self.settings.color_codes["yellow"]
         for i in range(self.settings.width):
-            self.grid[self.settings.height - 1][i] = (
-                self.settings.color_codes["yellow"] + "░" + self.settings.reset_code
-            )
+            self.grid[self.settings.height - 1][i] = yellow + "░" + reset
 
     def print_grid(self):
         print("\033[H", end="")
