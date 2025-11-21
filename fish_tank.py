@@ -43,11 +43,16 @@ class Fish:
 
     def swim(self):
         if self.at_edge():
-            self.direction *= -1
+            self.change_direction()
+        if random.random() < 0.02:
+            self.change_direction()
         self.position[1] += self.direction
 
     def at_edge(self):
         return self.position[1] >= self.settings.width - 3 or self.position[1] <= 0
+
+    def change_direction(self):
+        self.direction *= -1
 
 
 class FishTank:
