@@ -33,16 +33,17 @@ class Fish:
 
     def __init__(self):
         self.settings = Settings()
-        self.sprites = {"right": "><>", "left": "<><"}
+        self.sprites = {1: "><>", -1: "<><"}
         self.position = [
             random.randint(0, self.settings.height - 3),
             random.randint(0, self.settings.width - 1),
         ]
-        self.speed = random.randint(1, 2)
+        self.direction = random.choice((1, -1))
+        self.speed = random.choice((1, 2))
         self.color = random.choice(list(self.settings.color_codes.keys()))
 
     def swim(self):
-        self.position[1] += self.speed
+        self.position[1] += self.speed * self.direction
 
 
 class FishTank:
@@ -69,7 +70,7 @@ class FishTank:
 
     def prep_grid(self):
         # Insert fish
-        for i, char in enumerate(self.fish.sprites["right"]):
+        for i, char in enumerate(self.fish.sprites[self.fish.direction]):
             self.grid[self.fish.position[0]][self.fish.position[1] + i] = (
                 self.settings.color_codes[self.fish.color]
                 + char
