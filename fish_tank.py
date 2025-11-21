@@ -9,7 +9,7 @@ class Settings:
 
     def __init__(self):
         self.framerate = 5
-        self.fish_count = 35
+        self.fish_count = 1
 
         self.size = shutil.get_terminal_size()
         self.width = self.size.columns
@@ -54,16 +54,22 @@ class Fish:
         ]
 
     def swim(self):
+        action_taken = False
+
         if random.random() < 0.03:
             self.change_altitude()
+            action_taken = True
 
         if random.random() < 0.03:
             self.change_direction()
+            action_taken = True
 
         if self.would_hit_horizontal_edge():
             self.change_direction()
+            action_taken = True
 
-        self.position[1] += self.direction
+        if not action_taken:
+            self.position[1] += self.direction
 
     def change_altitude(self):
         y = self.position[0]
