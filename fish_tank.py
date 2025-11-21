@@ -52,20 +52,25 @@ class Fish:
             random.randint(0, self.settings.height - 2),
             random.randint(0, self.settings.width - len(self.sprite[self.direction])),
         ]
+        self.direction_cooldown = 0
 
     def swim(self):
         if self.would_hit_horizontal_edge():
             self.change_direction()
+            self.direction_cooldown = 5
             return
 
         r = random.random()
 
         if r < 0.03:
             self.change_altitude()
-        elif r < 0.06:
+        elif r < 0.06 and self.direction_cooldown == 0:
             self.change_direction()
+            self.direction_cooldown = 5
         elif r < 0.56:
             self.position[1] += self.direction
+
+        self.direction_cooldown = max(0, self.direction_cooldown - 1)
 
     def change_altitude(self):
         y = self.position[0]
