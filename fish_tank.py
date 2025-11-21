@@ -8,7 +8,7 @@ class Settings:
     """A class to store all settings for fish_tank."""
 
     def __init__(self):
-        self.framerate = 4
+        self.framerate = 40
 
         self.size = shutil.get_terminal_size()
         self.width = self.size.columns
@@ -35,15 +35,19 @@ class Fish:
         self.settings = Settings()
         self.sprites = {1: "><>", -1: "<><"}
         self.position = [
-            random.randint(0, self.settings.height - 3),
-            random.randint(0, self.settings.width - 1),
+            random.randint(0, self.settings.height - 2),
+            random.randint(0, self.settings.width - 3),
         ]
         self.direction = random.choice((1, -1))
-        self.speed = random.choice((1, 2))
         self.color = random.choice(list(self.settings.color_codes.keys()))
 
     def swim(self):
-        self.position[1] += self.speed * self.direction
+        if self.at_edge():
+            self.direction *= -1
+        self.position[1] += self.direction
+
+    def at_edge(self):
+        return self.position[1] >= self.settings.width - 3 or self.position[1] <= 0
 
 
 class FishTank:
@@ -59,7 +63,7 @@ class FishTank:
             self.reset_grid()
             self.prep_grid()
             self.print_grid()
-            self.fish.swim()
+            self.update_fish()
             time.sleep(1 / self.settings.framerate)
 
     def reset_grid(self):
@@ -87,6 +91,9 @@ class FishTank:
         for row in self.grid:
             print("".join(row), end="")
         sys.stdout.flush()
+
+    def update_fish(self):
+        self.fish.swim()
 
 
 if __name__ == "__main__":
