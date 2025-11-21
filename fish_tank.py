@@ -92,6 +92,15 @@ class Fish:
         )
 
 
+class Kelp:
+    """A class to store all information about a kelp."""
+
+    def __init__(self):
+        self.settings = Settings()
+        self.height = random.randint(3, 20)
+        self.position = random.randint(0, self.settings.width - 1)
+
+
 class FishTank:
     """Overall class to manage fish_tank assets and behavior."""
 
@@ -99,6 +108,7 @@ class FishTank:
         """Initialize fish_tank and create animation resources"""
         self.settings = Settings()
         self.school = self.create_school()
+        self.kelp = Kelp()
 
     def play_animation(self):
         while True:
@@ -116,6 +126,13 @@ class FishTank:
 
     def prep_grid(self):
         reset = self.settings.reset_code
+
+        # Insert klep
+        green = self.settings.color_codes["green"]
+        for i in range(self.kelp.height):
+            self.grid[self.settings.height - 2 - i][self.kelp.position] = (
+                green + ")" + reset
+            )
 
         # Insert fish
         for fish in self.school:
@@ -142,6 +159,9 @@ class FishTank:
 
     def create_school(self):
         return [Fish() for _ in range(self.settings.fish_count)]
+
+    def update_klep(self):
+        pass
 
 
 if __name__ == "__main__":
