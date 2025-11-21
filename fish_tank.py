@@ -8,8 +8,8 @@ class Settings:
     """A class to store all settings for fish_tank."""
 
     def __init__(self):
-        self.framerate = 40
-        self.fish_count = 10
+        self.framerate = 5
+        self.fish_count = 100
 
         self.size = shutil.get_terminal_size()
         self.width = self.size.columns
@@ -43,14 +43,17 @@ class Fish:
         self.color = random.choice(list(self.settings.color_codes.keys()))
 
     def swim(self):
-        if self.at_edge():
-            self.change_direction()
         if random.random() < 0.02:
             self.change_direction()
+
+        if self.would_hit_edge():
+            self.change_direction()
+
         self.position[1] += self.direction
 
-    def at_edge(self):
-        return self.position[1] >= self.settings.width - 3 or self.position[1] <= 0
+    def would_hit_edge(self):
+        next_x = self.position[1] + self.direction
+        return next_x > self.settings.width - 3 or next_x < 0
 
     def change_direction(self):
         self.direction *= -1
