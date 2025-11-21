@@ -9,6 +9,7 @@ class Settings:
 
     def __init__(self):
         self.framerate = 40
+        self.fish_count = 10
 
         self.size = shutil.get_terminal_size()
         self.width = self.size.columns
@@ -61,7 +62,7 @@ class FishTank:
     def __init__(self):
         """Initialize fish_tank and create animation resources"""
         self.settings = Settings()
-        self.fish = Fish()
+        self.school = self.create_school()
 
     def play_animation(self):
         while True:
@@ -79,12 +80,13 @@ class FishTank:
 
     def prep_grid(self):
         # Insert fish
-        for i, char in enumerate(self.fish.sprites[self.fish.direction]):
-            self.grid[self.fish.position[0]][self.fish.position[1] + i] = (
-                self.settings.color_codes[self.fish.color]
-                + char
-                + self.settings.reset_code
-            )
+        for fish in self.school:
+            for i, char in enumerate(fish.sprites[fish.direction]):
+                self.grid[fish.position[0]][fish.position[1] + i] = (
+                    self.settings.color_codes[fish.color]
+                    + char
+                    + self.settings.reset_code
+                )
         # Insert sand
         for i in range(self.settings.width):
             self.grid[self.settings.height - 1][i] = (
@@ -98,7 +100,11 @@ class FishTank:
         sys.stdout.flush()
 
     def update_fish(self):
-        self.fish.swim()
+        for fish in self.school:
+            fish.swim()
+
+    def create_school(self):
+        return [Fish() for _ in range(self.settings.fish_count)]
 
 
 if __name__ == "__main__":
