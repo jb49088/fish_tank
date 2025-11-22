@@ -130,16 +130,22 @@ class FishTank:
         ]
 
     def prep_grid(self):
-        reset = self.settings.reset_code
+        self.insert_kelp()
+        self.insert_fish()
+        self.insert_sand()
 
-        # Insert kelp
+    def insert_kelp(self):
+        reset = self.settings.reset_code
         green = self.kelp.color
+
         for i, char in enumerate(self.kelp.sprite):
             self.grid[self.settings.height - 2 - i][self.kelp.position] = (
                 green + char + reset
             )
 
-        # Insert fish
+    def insert_fish(self):
+        reset = self.settings.reset_code
+
         for fish in self.school:
             sprite = fish.sprite[fish.direction]
             color = fish.color
@@ -147,8 +153,10 @@ class FishTank:
             for i, char in enumerate(sprite):
                 self.grid[fish.position[0]][fish.position[1] + i] = color + char + reset
 
-        # Insert sand
+    def insert_sand(self):
+        reset = self.settings.reset_code
         yellow = self.settings.color_codes[2]
+
         for i in range(self.settings.width):
             self.grid[self.settings.height - 1][i] = yellow + "░" + reset
 
