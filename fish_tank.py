@@ -27,17 +27,17 @@ class Settings:
         ]
 
         self.reset_code = "\033[0m"
-        self.color_codes = {
-            "red": "\033[31m",
-            "orange": "\033[38;5;208m",
-            "yellow": "\033[33m",
-            "green": "\033[32m",
-            "blue": "\033[34m",
-            "indigo": "\033[38;5;63m",
-            "violet": "\033[38;5;93m",
-            "magenta": "\033[35m",
-            "cyan": "\033[36m",
-        }
+        self.color_codes = [
+            "\033[31m",  # Red
+            "\033[38;5;208m",  # Orange
+            "\033[33m",  # Yellow
+            "\033[32m",  # Green
+            "\033[34m",  # Blue
+            "\033[38;5;63m",  # Indigo
+            "\033[38;5;93m",  # Violet
+            "\033[35m",  # Magenta
+            "\033[36m",  # Cyan
+        ]
 
 
 class Fish:
@@ -46,7 +46,7 @@ class Fish:
     def __init__(self):
         self.settings = Settings()
         self.sprite = random.choice(self.settings.sprites)
-        self.color = random.choice(list(self.settings.color_codes.keys()))
+        self.color = random.choice(self.settings.color_codes)
         self.direction = random.choice((1, -1))
         self.position = [
             random.randint(0, self.settings.height - 2),
@@ -99,7 +99,7 @@ class Kelp:
         self.settings = Settings()
         self.height = random.randint(3, 20)
         self.sprite = self.build_kelp()
-        self.color = self.settings.color_codes["green"]
+        self.color = self.settings.color_codes[3]
         self.position = random.randint(0, self.settings.width - 1)
 
     def build_kelp(self):
@@ -142,13 +142,13 @@ class FishTank:
         # Insert fish
         for fish in self.school:
             sprite = fish.sprite[fish.direction]
-            color = self.settings.color_codes[fish.color]
+            color = fish.color
 
             for i, char in enumerate(sprite):
                 self.grid[fish.position[0]][fish.position[1] + i] = color + char + reset
 
         # Insert sand
-        yellow = self.settings.color_codes["yellow"]
+        yellow = self.settings.color_codes[2]
         for i in range(self.settings.width):
             self.grid[self.settings.height - 1][i] = yellow + "░" + reset
 
