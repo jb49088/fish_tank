@@ -17,19 +17,14 @@ class Settings:
         self.width = self.size.columns
         self.height = self.size.lines
 
-        self.sprites = [
-            {1: "><>", -1: "<><"},
-            {1: ">||>", -1: "<||<"},
-            {1: ">))>", -1: "<((<"},
-            {1: ">-==>", -1: "<==-<"},
-            {1: r">\\>", -1: "<//<"},
-            {1: "><)))*>", -1: "<*(((><"},
-            {1: "}-[[[*>", -1: "<*]]]-{"},
-            {1: "><XXX*>", -1: "<*XXX><"},
-        ]
 
-        self.reset_code = "\033[0m"
-        self.color_codes = [
+class Colors:
+    """A class to store color codes."""
+
+    def __init__(self):
+        self.reset = "\033[0m"
+
+        self.colors = [
             "\033[31m",  # Red
             "\033[38;5;208m",  # Orange
             "\033[33m",  # Yellow
@@ -42,13 +37,29 @@ class Settings:
         ]
 
 
+class Sprites:
+    """A class to store sprites."""
+
+    def __init__(self):
+        self.fish_sprites = [
+            {1: "><>", -1: "<><"},
+            {1: ">||>", -1: "<||<"},
+            {1: ">))>", -1: "<((<"},
+            {1: ">-==>", -1: "<==-<"},
+            {1: r">\\>", -1: "<//<"},
+            {1: "><)))*>", -1: "<*(((><"},
+            {1: "}-[[[*>", -1: "<*]]]-{"},
+            {1: "><XXX*>", -1: "<*XXX><"},
+        ]
+
+
 class Fish:
     """A class to store all information about a fish."""
 
     def __init__(self):
         self.settings = Settings()
-        self.sprite = random.choice(self.settings.sprites)
-        self.color = random.choice(self.settings.color_codes)
+        self.sprite = random.choice(Sprites().fish_sprites)
+        self.color = random.choice(Colors().colors)
         self.direction = random.choice((1, -1))
         self.position = [
             random.randint(0, self.settings.height - 2),
@@ -101,7 +112,7 @@ class Kelp:
         self.settings = Settings()
         self.height = random.randint(3, self.settings.height * 2 // 3)
         self.sprite = self.build_kelp()
-        self.color = self.settings.color_codes[3]
+        self.color = Colors().colors[3]
         self.position = [
             self.settings.height - 2,
             random.randint(0, self.settings.width - 2),
@@ -151,6 +162,7 @@ class FishTank:
     def __init__(self):
         """Initialize fish_tank and create animation resources."""
         self.settings = Settings()
+        self.colors = Colors()
         self.fish_group = self.create_fish_group()
         self.kelp_group = self.create_kelp_group()
         self.bubbler_group = self.create_bubbler_group()
@@ -176,7 +188,7 @@ class FishTank:
         self.insert_sand()
 
     def insert_kelp(self):
-        reset = self.settings.reset_code
+        reset = self.colors.reset
 
         for kelp in self.kelp_group:
             green = kelp.color
@@ -187,7 +199,7 @@ class FishTank:
                     )
 
     def insert_fish(self):
-        reset = self.settings.reset_code
+        reset = self.colors.reset
 
         for fish in self.fish_group:
             sprite = fish.sprite[fish.direction]
@@ -197,8 +209,8 @@ class FishTank:
                 self.grid[fish.position[0]][fish.position[1] + i] = color + char + reset
 
     def insert_sand(self):
-        reset = self.settings.reset_code
-        yellow = self.settings.color_codes[2]
+        reset = self.colors.reset
+        yellow = self.colors.colors[2]
 
         for i in range(self.settings.width):
             self.grid[self.settings.height - 1][i] = yellow + "░" + reset
