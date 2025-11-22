@@ -9,8 +9,9 @@ class Settings:
 
     def __init__(self):
         self.framerate = 5
-        self.fish_count = 20
-        self.kelp_count = 10
+        self.fish_count = 12
+        self.kelp_count = 7
+        self.bubbler_count = 2
 
         self.size = shutil.get_terminal_size()
         self.width = self.size.columns
@@ -152,7 +153,7 @@ class FishTank:
         self.settings = Settings()
         self.fish_group = self.create_fish_group()
         self.kelp_group = self.create_kelp_group()
-        self.bubbler = Bubbler()
+        self.bubbler_group = self.create_bubbler_group()
 
     def play_animation(self):
         while True:
@@ -205,9 +206,10 @@ class FishTank:
             self.grid[self.settings.height - 1][i] = yellow + "░" + reset
 
     def insert_bubblers(self):
-        if self.bubbler.bubbles:
-            for bubble in self.bubbler.bubbles:
-                self.grid[bubble[0]][bubble[1]] = "o"
+        for bubbler in self.bubbler_group:
+            if bubbler.bubbles:
+                for bubble in bubbler.bubbles:
+                    self.grid[bubble[0]][bubble[1]] = "o"
 
     def print_grid(self):
         print("\033[H", end="")
@@ -230,8 +232,12 @@ class FishTank:
         return [Kelp() for _ in range(self.settings.kelp_count)]
 
     def update_bubblers(self):
-        self.bubbler.create_bubble()
-        self.bubbler.elevate_bubbles()
+        for bubbler in self.bubbler_group:
+            bubbler.create_bubble()
+            bubbler.elevate_bubbles()
+
+    def create_bubbler_group(self):
+        return [Bubbler() for _ in range(self.settings.bubbler_count)]
 
 
 if __name__ == "__main__":
