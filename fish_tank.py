@@ -10,6 +10,7 @@ class Settings:
     def __init__(self):
         self.framerate = 5
         self.fish_count = 25
+        self.kelp_count = 10
 
         self.size = shutil.get_terminal_size()
         self.width = self.size.columns
@@ -102,7 +103,7 @@ class Kelp:
         self.color = self.settings.color_codes[3]
         self.position = [
             self.settings.height - 2,
-            random.randint(0, self.settings.width - 1),
+            random.randint(0, self.settings.width - 2),
         ]
 
     def build_kelp(self):
@@ -120,8 +121,8 @@ class FishTank:
     def __init__(self):
         """Initialize fish_tank and create animation resources"""
         self.settings = Settings()
-        self.school = self.create_school()
-        self.kelp = Kelp()
+        self.fish_group = self.create_fish_group()
+        self.kelp_group = self.create_kelp_group()
 
     def play_animation(self):
         while True:
@@ -145,18 +146,19 @@ class FishTank:
 
     def insert_kelp(self):
         reset = self.settings.reset_code
-        green = self.kelp.color
 
-        for i, segment in enumerate(self.kelp.sprite):
-            for j, char in enumerate(segment):
-                self.grid[self.kelp.position[0] - i][self.kelp.position[1] + j] = (
-                    green + char + reset
-                )
+        for kelp in self.kelp_group:
+            green = kelp.color
+            for i, segment in enumerate(kelp.sprite):
+                for j, char in enumerate(segment):
+                    self.grid[kelp.position[0] - i][kelp.position[1] + j] = (
+                        green + char + reset
+                    )
 
     def insert_fish(self):
         reset = self.settings.reset_code
 
-        for fish in self.school:
+        for fish in self.fish_group:
             sprite = fish.sprite[fish.direction]
             color = fish.color
 
@@ -177,14 +179,18 @@ class FishTank:
         sys.stdout.flush()
 
     def update_fish(self):
-        for fish in self.school:
+        for fish in self.fish_group:
             fish.swim()
 
-    def create_school(self):
+    def create_fish_group(self):
         return [Fish() for _ in range(self.settings.fish_count)]
 
     def update_kelp(self):
-        self.kelp.sway()
+        for kelp in self.kelp_group:
+            kelp.sway()
+
+    def create_kelp_group(self):
+        return [Kelp() for _ in range(self.settings.kelp_count)]
 
 
 if __name__ == "__main__":
