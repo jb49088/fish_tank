@@ -121,7 +121,7 @@ class Bubbler:
     def __init__(self):
         self.settings = Settings()
         self.position = [
-            self.settings.height - 2,
+            self.settings.height - 1,
             random.randint(0, self.settings.width - 1),
         ]
         self.bubbles = []
@@ -130,10 +130,16 @@ class Bubbler:
         if random.random() < 0.15:
             self.bubbles.append(*[self.position.copy()])
 
-    def move_bubble(self):
+    def elevate_bubbles(self):
         if self.bubbles:
             for i, bubble in enumerate(self.bubbles):
+                r = random.choice((-1, 0, 1))
+                new_x = bubble[1] + r
+                if 0 <= new_x <= self.settings.width - 1:
+                    bubble[1] += r
+
                 bubble[0] -= 1
+
                 if bubble[0] < 0:
                     del self.bubbles[i]
 
@@ -142,7 +148,7 @@ class FishTank:
     """Overall class to manage fish_tank assets and behavior."""
 
     def __init__(self):
-        """Initialize fish_tank and create animation resources"""
+        """Initialize fish_tank and create animation resources."""
         self.settings = Settings()
         self.fish_group = self.create_fish_group()
         self.kelp_group = self.create_kelp_group()
@@ -225,7 +231,7 @@ class FishTank:
 
     def update_bubblers(self):
         self.bubbler.create_bubble()
-        self.bubbler.move_bubble()
+        self.bubbler.elevate_bubbles()
 
 
 if __name__ == "__main__":
