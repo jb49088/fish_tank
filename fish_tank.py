@@ -160,9 +160,7 @@ class FishTank:
             self.reset_grid()
             self.prep_grid()
             self.print_grid()
-            self.update_fish()
-            self.update_kelp()
-            self.update_bubblers()
+            self.update_assets()
             time.sleep(1 / self.settings.framerate)
 
     def reset_grid(self):
@@ -217,24 +215,29 @@ class FishTank:
             print("".join(row), end="")
         sys.stdout.flush()
 
+    def update_assets(self):
+        self.update_fish()
+        self.update_kelp()
+        self.update_bubblers()
+
     def update_fish(self):
         for fish in self.fish_group:
             fish.swim()
-
-    def create_fish_group(self):
-        return [Fish() for _ in range(self.settings.fish_count)]
 
     def update_kelp(self):
         for kelp in self.kelp_group:
             kelp.sway()
 
-    def create_kelp_group(self):
-        return [Kelp() for _ in range(self.settings.kelp_count)]
-
     def update_bubblers(self):
         for bubbler in self.bubbler_group:
             bubbler.create_bubble()
             bubbler.elevate_bubbles()
+
+    def create_fish_group(self):
+        return [Fish() for _ in range(self.settings.fish_count)]
+
+    def create_kelp_group(self):
+        return [Kelp() for _ in range(self.settings.kelp_count)]
 
     def create_bubbler_group(self):
         return [Bubbler() for _ in range(self.settings.bubbler_count)]
