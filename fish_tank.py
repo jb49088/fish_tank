@@ -100,10 +100,13 @@ class Kelp:
         self.height = random.randint(3, 20)
         self.sprite = self.build_kelp()
         self.color = self.settings.color_codes[3]
-        self.position = random.randint(0, self.settings.width - 1)
+        self.position = [
+            self.settings.height - 2,
+            random.randint(0, self.settings.width - 1),
+        ]
 
     def build_kelp(self):
-        return [random.choice(("(", ")")) for _ in range(self.height)]
+        return [random.choice(("( ", " )")) for _ in range(self.height)]
 
 
 class FishTank:
@@ -138,10 +141,11 @@ class FishTank:
         reset = self.settings.reset_code
         green = self.kelp.color
 
-        for i, char in enumerate(self.kelp.sprite):
-            self.grid[self.settings.height - 2 - i][self.kelp.position] = (
-                green + char + reset
-            )
+        for i, segment in enumerate(self.kelp.sprite):
+            for j, char in enumerate(segment):
+                self.grid[self.kelp.position[0] - i][self.kelp.position[1] + j] = (
+                    green + char + reset
+                )
 
     def insert_fish(self):
         reset = self.settings.reset_code
