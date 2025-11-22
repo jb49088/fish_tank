@@ -207,7 +207,7 @@ class FishTank:
         for bubbler in self.bubbler_group:
             if bubbler.bubbles:
                 for bubble in bubbler.bubbles:
-                    self.grid[bubble[0]][bubble[1]] = "o"
+                    self.grid[bubble[0]][bubble[1]] = random.choice(("o", "O"))
 
     def print_grid(self):
         print("\033[H", end="")
