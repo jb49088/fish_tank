@@ -98,7 +98,12 @@ class Kelp:
     def __init__(self):
         self.settings = Settings()
         self.height = random.randint(3, 20)
+        self.sprite = self.build_kelp()
+        self.color = self.settings.color_codes["green"]
         self.position = random.randint(0, self.settings.width - 1)
+
+    def build_kelp(self):
+        return [random.choice(("(", ")")) for _ in range(self.height)]
 
 
 class FishTank:
@@ -127,11 +132,11 @@ class FishTank:
     def prep_grid(self):
         reset = self.settings.reset_code
 
-        # Insert klep
-        green = self.settings.color_codes["green"]
-        for i in range(self.kelp.height):
+        # Insert kelp
+        green = self.kelp.color
+        for i, char in enumerate(self.kelp.sprite):
             self.grid[self.settings.height - 2 - i][self.kelp.position] = (
-                green + ")" + reset
+                green + char + reset
             )
 
         # Insert fish
