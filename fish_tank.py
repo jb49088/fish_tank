@@ -9,7 +9,7 @@ class Settings:
 
     def __init__(self):
         self.framerate = 5
-        self.fish_count = 25
+        self.fish_count = 20
         self.kelp_count = 10
 
         self.size = shutil.get_terminal_size()
@@ -115,6 +115,29 @@ class Kelp:
                 self.sprite[i] = " )" if segment == "( " else "( "
 
 
+class Bubbler:
+    """A class to store all information about a bubbler."""
+
+    def __init__(self):
+        self.settings = Settings()
+        self.position = [
+            self.settings.height - 2,
+            random.randint(0, self.settings.width - 1),
+        ]
+        self.bubbles = []
+
+    def create_bubble(self):
+        if random.random() < 0.15:
+            self.bubbles.append(*[self.position.copy()])
+
+    def move_bubble(self):
+        if self.bubbles:
+            for i, bubble in enumerate(self.bubbles):
+                bubble[0] -= 1
+                if bubble[0] < 0:
+                    del self.bubbles[i]
+
+
 class FishTank:
     """Overall class to manage fish_tank assets and behavior."""
 
@@ -123,6 +146,7 @@ class FishTank:
         self.settings = Settings()
         self.fish_group = self.create_fish_group()
         self.kelp_group = self.create_kelp_group()
+        self.bubbler = Bubbler()
 
     def play_animation(self):
         while True:
@@ -131,6 +155,7 @@ class FishTank:
             self.print_grid()
             self.update_fish()
             self.update_kelp()
+            self.update_bubblers()
             time.sleep(1 / self.settings.framerate)
 
     def reset_grid(self):
@@ -140,6 +165,7 @@ class FishTank:
         ]
 
     def prep_grid(self):
+        self.insert_bubblers()
         self.insert_kelp()
         self.insert_fish()
         self.insert_sand()
@@ -172,6 +198,11 @@ class FishTank:
         for i in range(self.settings.width):
             self.grid[self.settings.height - 1][i] = yellow + "░" + reset
 
+    def insert_bubblers(self):
+        if self.bubbler.bubbles:
+            for bubble in self.bubbler.bubbles:
+                self.grid[bubble[0]][bubble[1]] = "o"
+
     def print_grid(self):
         print("\033[H", end="")
         for row in self.grid:
@@ -191,6 +222,10 @@ class FishTank:
 
     def create_kelp_group(self):
         return [Kelp() for _ in range(self.settings.kelp_count)]
+
+    def update_bubblers(self):
+        self.bubbler.create_bubble()
+        self.bubbler.move_bubble()
 
 
 if __name__ == "__main__":
