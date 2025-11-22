@@ -111,10 +111,7 @@ class Kelp:
     def sway(self):
         for i, segment in enumerate(self.sprite):
             if random.random() < 0.03:
-                if segment == "( ":
-                    self.sprite[i] = " )"
-                else:
-                    self.sprite[i] = "( "
+                self.sprite[i] = " )" if segment == "( " else "( "
 
 
 class FishTank:
