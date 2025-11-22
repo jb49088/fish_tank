@@ -108,6 +108,14 @@ class Kelp:
     def build_kelp(self):
         return [random.choice(("( ", " )")) for _ in range(self.height)]
 
+    def sway(self):
+        for i, segment in enumerate(self.sprite):
+            if random.random() < 0.03:
+                if segment == "( ":
+                    self.sprite[i] = " )"
+                else:
+                    self.sprite[i] = "( "
+
 
 class FishTank:
     """Overall class to manage fish_tank assets and behavior."""
@@ -124,6 +132,7 @@ class FishTank:
             self.prep_grid()
             self.print_grid()
             self.update_fish()
+            self.update_kelp()
             time.sleep(1 / self.settings.framerate)
 
     def reset_grid(self):
@@ -177,8 +186,8 @@ class FishTank:
     def create_school(self):
         return [Fish() for _ in range(self.settings.fish_count)]
 
-    def update_klep(self):
-        pass
+    def update_kelp(self):
+        self.kelp.sway()
 
 
 if __name__ == "__main__":
