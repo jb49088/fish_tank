@@ -172,8 +172,7 @@ class Bubbler:
 
                 bubble[0] -= 1
 
-                if bubble[0] < 0:
-                    del self.bubbles[i]
+                self.bubbles = [bubble for bubble in self.bubbles if bubble[0] >= 0]
 
 
 class StatBar:
