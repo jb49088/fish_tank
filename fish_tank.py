@@ -2,8 +2,6 @@
 # =                                  FISH_TANK                                   =
 # ================================================================================
 
-#  TODO: Implement dependency injection project wide
-
 import random
 import shutil
 import sys
@@ -11,7 +9,7 @@ import time
 
 
 class Settings:
-    """A class to store all settings for fish_tank."""
+    """A class to store all configurable settings for fish_tank."""
 
     def __init__(self):
         self.framerate = 5
@@ -19,13 +17,13 @@ class Settings:
         self.kelp_count = 7
         self.bubbler_count = 2
 
-        self.size = shutil.get_terminal_size()
-        self.width = self.size.columns
-        self.height = self.size.lines
+        size = shutil.get_terminal_size()
+        self.width = size.columns
+        self.height = size.lines
 
 
 class Colors:
-    """A class to store color codes."""
+    """A class to store all color codes used in fish_tank."""
 
     def __init__(self):
         self.reset = "\033[0m"
@@ -44,7 +42,7 @@ class Colors:
 
 
 class Sprites:
-    """A class to store sprites."""
+    """A class to store all sprites used in fish_tank."""
 
     def __init__(self):
         self.fish_sprites = [
@@ -76,12 +74,12 @@ class Sprites:
 
 
 class Fish:
-    """A class to store all information about a fish."""
+    """A class to store all information about a fish in fish_tank."""
 
-    def __init__(self):
-        self.settings = Settings()
-        self.sprite = random.choice(Sprites().fish_sprites)
-        self.color = random.choice(Colors().colors)
+    def __init__(self, settings, sprites, colors):
+        self.settings = settings
+        self.sprite = random.choice(sprites.fish_sprites)
+        self.color = random.choice(colors.colors)
         self.direction = random.choice((1, -1))
         self.position = [
             random.randint(0, self.settings.height - 2),
@@ -128,13 +126,13 @@ class Fish:
 
 
 class Kelp:
-    """A class to store all information about a kelp."""
+    """A class to store all information about a kelp in fish_tank."""
 
-    def __init__(self):
-        self.settings = Settings()
+    def __init__(self, settings, colors):
+        self.settings = settings
+        self.color = colors.colors[3]
         self.height = random.randint(3, self.settings.height * 2 // 3)
         self.sprite = self.build_kelp()
-        self.color = Colors().colors[3]
         self.position = [
             self.settings.height - 2,
             random.randint(0, self.settings.width - 2),
@@ -150,10 +148,10 @@ class Kelp:
 
 
 class Bubbler:
-    """A class to store all information about a bubbler."""
+    """A class to store all information about a bubbler in fish_tank."""
 
-    def __init__(self):
-        self.settings = Settings()
+    def __init__(self, settings):
+        self.settings = settings
         self.position = [
             self.settings.height - 1,
             random.randint(0, self.settings.width - 1),
@@ -179,7 +177,7 @@ class Bubbler:
 
 
 class StatBar:
-    """A class to store all information about the stat bar."""
+    """A class to store all information about the stat bar in fish_tank."""
 
     def __init__(self, settings, bubbler_group):
         self.settings = settings
@@ -209,8 +207,8 @@ class FishTank:
     """Overall class to manage fish_tank assets and behavior."""
 
     def __init__(self):
-        """Initialize fish_tank and create animation resources."""
         self.settings = Settings()
+        self.sprites = Sprites()
         self.colors = Colors()
 
         self.fish_group = self.create_fish_group()
@@ -245,7 +243,7 @@ class FishTank:
         width = 39
         height = 15
 
-        for i, line in enumerate(Sprites().castle_sprite.splitlines()):
+        for i, line in enumerate(self.sprites.castle_sprite.splitlines()):
             for j, char in enumerate(line):
                 self.grid[self.settings.height - height + i][
                     self.settings.width - (width + self.settings.width // 10) + j
@@ -314,13 +312,18 @@ class FishTank:
             bubbler.elevate_bubbles()
 
     def create_fish_group(self):
-        return [Fish() for _ in range(self.settings.fish_count)]
+        return [
+            Fish(self.settings, self.sprites, self.colors)
+            for _ in range(self.settings.fish_count)
+        ]
 
     def create_kelp_group(self):
-        return [Kelp() for _ in range(self.settings.kelp_count)]
+        return [
+            Kelp(self.settings, self.colors) for _ in range(self.settings.kelp_count)
+        ]
 
     def create_bubbler_group(self):
-        return [Bubbler() for _ in range(self.settings.bubbler_count)]
+        return [Bubbler(self.settings) for _ in range(self.settings.bubbler_count)]
 
 
 if __name__ == "__main__":
