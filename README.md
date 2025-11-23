@@ -33,4 +33,4 @@ fish_tank
 
 ### Screenshots
 
-<img width="1568" height="888" alt="Screenshot 2025-11-22 201323" src="https://github.com/user-attachments/assets/c751239a-95fc-4e4d-8588-ba618b61338a" />
+<img width="1568" height="888" alt="Screenshot 2025-11-23 000607" src="https://github.com/user-attachments/assets/103cd807-64d8-4661-9002-45446d642d2d" />
