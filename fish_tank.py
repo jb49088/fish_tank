@@ -52,6 +52,22 @@ class Sprites:
             {1: "><XXX*>", -1: "<*XXX><"},
         ]
 
+        self.castle_sprite = r"""
+                       T~~
+                       |
+                      /^\
+                     /   \
+         _   _   _  /     \  _   _   _
+        [ ]_[ ]_[ ]/ _   _ \[ ]_[ ]_[ ]
+        |_=__-_ =_|_[ ]_[ ]_|_=-___-__|
+         | _- =  | =_ = _    |= _=   |
+         |= -[]  |- = _ =    |_-=_[] |
+         | =_    |= - ___    | =_ =  |
+         |=  []- |-  /| |\   |=_ =[] |
+         |- =_   | =| | | |  |- = -  |
+         |_______|__|_|_|_|__|_______|
+         """
+
 
 class Fish:
     """A class to store all information about a fish."""
@@ -182,6 +198,7 @@ class FishTank:
         ]
 
     def prep_grid(self):
+        self.insert_castle()
         self.insert_bubblers()
         self.insert_kelp()
         self.insert_fish()
@@ -220,6 +237,16 @@ class FishTank:
             if bubbler.bubbles:
                 for bubble in bubbler.bubbles:
                     self.grid[bubble[0]][bubble[1]] = random.choice(("o", "O"))
+
+    def insert_castle(self):
+        width = 39
+        height = 15
+
+        for i, line in enumerate(Sprites().castle_sprite.splitlines()):
+            for j, char in enumerate(line):
+                self.grid[self.settings.height - height + i][
+                    self.settings.width - (width + self.settings.width // 10) + j
+                ] = char
 
     def print_grid(self):
         print("\033[H", end="")
