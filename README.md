@@ -6,12 +6,29 @@ fish_tank is a double-buffered, grid-based, object-oriented terminal animation i
 
 ### Code Statistics
 
+```
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Python                           1             62             22            206
+Markdown                         1             11              4             21
+-------------------------------------------------------------------------------
+SUM:                             2             73             26            227
+-------------------------------------------------------------------------------
+```
 <!-- CODE_STATISTICS_END -->
 
 <!-- PROJECT_STRUCTURE_START -->
 
 ### Project Structure
 
+```
+fish_tank
+├── fish_tank.py
+└── README.md
+
+1 directory, 2 files
+```
 <!-- PROJECT_STRUCTURE_END -->
 
 ### Screenshots
