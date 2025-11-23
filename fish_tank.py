@@ -172,6 +172,26 @@ class Bubbler:
                     del self.bubbles[i]
 
 
+class StatBar:
+    """A class to store all information about the stat bar."""
+
+    def __init__(self, settings, bubbler_group):
+        self.settings = settings
+        self.bubbler_group = bubbler_group
+
+    def build_stat_bar(self):
+        return (
+            f"{self.settings.framerate} FPS | "
+            f"{self.settings.fish_count} Fish | "
+            f"{self.settings.kelp_count} Kelp | "
+            f"{self.settings.bubbler_count} Bubblers | "
+            f"{self.get_bubble_count()} Bubbles"
+        )
+
+    def get_bubble_count(self):
+        return sum(len(bubbler.bubbles) for bubbler in self.bubbler_group)
+
+
 class FishTank:
     """Overall class to manage fish_tank assets and behavior."""
 
@@ -179,9 +199,12 @@ class FishTank:
         """Initialize fish_tank and create animation resources."""
         self.settings = Settings()
         self.colors = Colors()
+
         self.fish_group = self.create_fish_group()
         self.kelp_group = self.create_kelp_group()
         self.bubbler_group = self.create_bubbler_group()
+
+        self.statbar = StatBar(self.settings, self.bubbler_group)
 
     def play_animation(self):
         while True:
@@ -203,6 +226,23 @@ class FishTank:
         self.insert_kelp()
         self.insert_fish()
         self.insert_sand()
+        self.insert_stat_bar()
+
+    def insert_castle(self):
+        width = 39
+        height = 15
+
+        for i, line in enumerate(Sprites().castle_sprite.splitlines()):
+            for j, char in enumerate(line):
+                self.grid[self.settings.height - height + i][
+                    self.settings.width - (width + self.settings.width // 10) + j
+                ] = char
+
+    def insert_bubblers(self):
+        for bubbler in self.bubbler_group:
+            if bubbler.bubbles:
+                for bubble in bubbler.bubbles:
+                    self.grid[bubble[0]][bubble[1]] = random.choice(("o", "O"))
 
     def insert_kelp(self):
         reset = self.colors.reset
@@ -232,21 +272,9 @@ class FishTank:
         for i in range(self.settings.width):
             self.grid[self.settings.height - 1][i] = yellow + "░" + reset
 
-    def insert_bubblers(self):
-        for bubbler in self.bubbler_group:
-            if bubbler.bubbles:
-                for bubble in bubbler.bubbles:
-                    self.grid[bubble[0]][bubble[1]] = random.choice(("o", "O"))
-
-    def insert_castle(self):
-        width = 39
-        height = 15
-
-        for i, line in enumerate(Sprites().castle_sprite.splitlines()):
-            for j, char in enumerate(line):
-                self.grid[self.settings.height - height + i][
-                    self.settings.width - (width + self.settings.width // 10) + j
-                ] = char
+    def insert_stat_bar(self):
+        for i, char in enumerate(self.statbar.build_stat_bar()):
+            self.grid[0][i] = char
 
     def print_grid(self):
         print("\033[H", end="")  # Move cursor to top-left
