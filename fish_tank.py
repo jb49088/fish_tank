@@ -2,7 +2,7 @@
 # =                                  FISH_TANK                                   =
 # ================================================================================
 
-#  TODO: Implement dependency injection
+#  TODO: Implement dependency injection project wide
 
 import random
 import shutil
@@ -185,6 +185,7 @@ class StatBar:
         self.settings = settings
         self.bubbler_group = bubbler_group
 
+    #  TODO: Implement truncation if length > terminal width
     def build_stat_bar(self):
         return (
             f"{self.settings.framerate} FPS | "
