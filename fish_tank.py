@@ -249,7 +249,7 @@ class FishTank:
                 ] = char
 
     def print_grid(self):
-        print("\033[H", end="")
+        print("\033[H", end="")  # Move cursor to top-left
         for row in self.grid:
             print("".join(row), end="")
         sys.stdout.flush()
@@ -284,7 +284,11 @@ class FishTank:
 
 if __name__ == "__main__":
     fish_tank = FishTank()
+    print("\033[?25l", end="")  # Hide cursor
     try:
         fish_tank.play_animation()
     except KeyboardInterrupt:
+        pass
+    finally:
+        print("\033[?25h", end="")  # Show cursor again
         sys.exit()
