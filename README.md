@@ -32,3 +32,5 @@ fish_tank
 <!-- PROJECT_STRUCTURE_END -->
 
 ### Screenshots
+
+<img width="1568" height="888" alt="Screenshot 2025-11-22 201323" src="https://github.com/user-attachments/assets/c751239a-95fc-4e4d-8588-ba618b61338a" />
