@@ -185,18 +185,24 @@ class StatBar:
         self.settings = settings
         self.bubbler_group = bubbler_group
 
-    #  TODO: Implement truncation if length > terminal width
     def build_stat_bar(self):
         return (
-            f"{self.settings.framerate} FPS | "
-            f"{self.settings.fish_count} Fish | "
-            f"{self.settings.kelp_count} Kelp | "
-            f"{self.settings.bubbler_count} Bubblers | "
-            f"{self.get_bubble_count()} Bubbles"
+            f"{self.humanize(self.settings.framerate)} FPS | "
+            f"{self.humanize(self.settings.fish_count)} Fish | "
+            f"{self.humanize(self.settings.kelp_count)} Kelp | "
+            f"{self.humanize(self.settings.bubbler_count)} Bubblers | "
+            f"{self.humanize(self.get_bubble_count())} Bubbles"
         )
 
     def get_bubble_count(self):
         return sum(len(bubbler.bubbles) for bubbler in self.bubbler_group)
+
+    def humanize(self, n):
+        for unit in ["", "K", "M", "B", "T"]:
+            if abs(n) < 1000:
+                return f"{n}{unit}"
+            n = round(n / 1000, 1)
+        return f"{n}T"
 
 
 class FishTank:
@@ -323,7 +329,5 @@ if __name__ == "__main__":
     try:
         fish_tank.play_animation()
     except KeyboardInterrupt:
-        pass
-    finally:
         print("\033[?25h", end="")  # Show cursor again
         sys.exit()
