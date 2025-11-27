@@ -160,7 +160,7 @@ class Bubbler:
 
     def create_bubble(self):
         if random.random() < 0.15:
-            self.bubbles.append(*[self.position.copy()])
+            self.bubbles.append(self.position.copy())
 
     def elevate_bubbles(self):
         if self.bubbles:
