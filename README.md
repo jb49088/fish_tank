@@ -12,9 +12,8 @@ Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
 Python                           1             72             25            238
 Markdown                         1             10              4             24
-Text                             1              0              0             17
 -------------------------------------------------------------------------------
-SUM:                             3             82             29            279
+SUM:                             2             82             29            262
 -------------------------------------------------------------------------------
 ```
 <!-- CODE_STATISTICS_END -->
@@ -26,10 +25,9 @@ SUM:                             3             82             29            279
 ```
 fish_tank
 ├── fish_tank.py
-├── README.md
-└── requirements.txt
+└── README.md
 
-1 directory, 3 files
+1 directory, 2 files
 ```
 <!-- PROJECT_STRUCTURE_END -->
 
