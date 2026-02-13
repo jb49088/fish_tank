@@ -131,7 +131,7 @@ class Kelp:
     def __init__(self, settings, colors):
         self.settings = settings
         self.color = colors.colors[3]
-        self.height = random.randint(3, self.settings.height * 2 // 3)
+        self.height = random.randint(3, int(self.settings.height * (2 / 3)))
         self.sprite = self.build_kelp()
         self.position = [
             self.settings.height - 2,

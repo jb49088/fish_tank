@@ -11,10 +11,10 @@ fish_tank is a double-buffered, grid-based, object-oriented terminal animation i
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
 Python                           1             72             25            238
-Markdown                         1             10              4             22
+Markdown                         1             10              4             24
 Text                             1              0              0             17
 -------------------------------------------------------------------------------
-SUM:                             3             82             29            277
+SUM:                             3             82             29            279
 -------------------------------------------------------------------------------
 ```
 <!-- CODE_STATISTICS_END -->
